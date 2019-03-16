@@ -1,0 +1,25 @@
+FROM alpine
+ENV user=elvys
+RUN apk update
+RUN apk add vim
+RUN apk add git
+RUN apk add nodejs
+RUN apk add nodejs-npm
+RUN apk add php7
+RUN apk add php7-xdebug
+RUN apk add python3
+RUN apk add curl
+RUN apk add wget
+RUN apk add sudo
+RUN apk add screen
+RUN echo "zend_extension=/usr/lib/php7/modules/xdebug.so" >> /etc/php7/php.ini
+RUN echo "xdebug.remote_enable=1" >> /etc/php7/php.ini
+RUN echo "xdebug.remote_autostart=true" >> /etc/php7/php.ini
+RUN adduser -D $user $user
+RUN echo "$user ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+USER $user
+WORKDIR /home/$user
+RUN git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+RUN git clone https://github.com/elvyscruz/dotfiles
+RUN ln -s ~/dotfiles/.vimrc .vimrc
+RUN vim +PluginInstall +qall
