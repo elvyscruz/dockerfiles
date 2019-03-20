@@ -12,6 +12,8 @@ RUN apk add curl
 RUN apk add wget
 RUN apk add sudo
 RUN apk add screen
+RUN apk add composer
+RUN apk add php7-tokenizer
 RUN echo "zend_extension=/usr/lib/php7/modules/xdebug.so" >> /etc/php7/php.ini
 RUN echo "xdebug.remote_enable=1" >> /etc/php7/php.ini
 RUN echo "xdebug.remote_autostart=true" >> /etc/php7/php.ini
@@ -19,6 +21,8 @@ RUN adduser -D $user $user
 RUN echo "$user ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 USER $user
 WORKDIR /home/$user
+RUN composer global require felixfbecker/language-server jetbrains/phpstorm-stubs:@dev
+RUN composer run-script --working-dir ~/.composer/vendor/felixfbecker/language-server parse-stubs
 RUN git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 RUN git clone https://github.com/elvyscruz/dotfiles
 RUN ln -s ~/dotfiles/.vimrc .vimrc
