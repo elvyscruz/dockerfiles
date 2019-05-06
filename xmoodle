@@ -1,0 +1,6 @@
+FROM alpine:latest
+RUN apk update
+RUN apk add apache2
+RUN apk add php7-apache2
+EXPOSE 80
+ENTRYPOINT ["/usr/sbin/httpd","-D","FOREGROUND"]
