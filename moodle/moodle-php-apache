@@ -1,0 +1,12 @@
+FROM moodlehq/moodle-php-apache:7.4
+LABEL maintainer="Elvys Cruz <elvys.cruz@gmail.com>"
+RUN apt-get update -y
+RUN apt install gnuplot -y
+RUN apt install maxima -y --no-install-suggests --no-install-recommends
+RUN sed -e 's/upload_max_filesize = 2M/upload_max_filesize = 100M/' \ 
+    -e 's/post_max_size = 8M/post_max_size = 100M/' \
+    -e 's/max_execution_time = 30/max_execution_time = 300/' \
+    -e 's/;max_input_vars = 1000/max_input_vars = 5000/' \
+    /usr/local/etc/php/php.ini-production \
+    > /usr/local/etc/php/php.ini
+ADD mpm_prefork.conf /etc/apache2/mods-enabled/mpm_prefork.conf
